@@ -52,6 +52,8 @@ public class Fireworks extends JPanel{
     JFrame jfrm = new JFrame("Fireworks");
     static int count2 = 0;
     static BufferedImage im = null;
+    static BufferedImage im2 = null;
+    static BufferedImage im3 = null;
  
     static Fireworks pe;
 
@@ -68,6 +70,10 @@ public class Fireworks extends JPanel{
         private double dx[] = null;
         private double dy[] = null;
         private int count = 255;
+        int red = (int)Math.round(Math.random()*255.0);
+        int green = (int)Math.round(Math.random()*255.0);
+        int blue = (int)Math.round(Math.random()*255.0);
+
         public Explosion(int x, int y) {
             this.x = new double[NO_POINTS];
             this.y = new double[NO_POINTS];
@@ -84,7 +90,7 @@ public class Fireworks extends JPanel{
         }
 
         void draw(Graphics g) {
-            Color c = new Color(count,count,count--);
+            Color c = new Color(red*count/255,green*count/255,blue*count--/255);
             g.setColor(c);
             for (int i = 0; i < NO_POINTS;i++) {
                 g.fillRect((int)x[i], (int)y[i], 4,4);
@@ -126,6 +132,8 @@ public class Fireworks extends JPanel{
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, width, height);
         g.drawImage(im, 1000-count2, 0, null);
+        g.drawImage(im2, 2500-count2, 0, null);
+        g.drawImage(im3, 4000-count2, 0, null);
         if(explosions.size() > 0) {
             int i = 0;
             for (; i < explosions.size();i++) {
@@ -152,8 +160,13 @@ public class Fireworks extends JPanel{
             go.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    t.start();
-                }
+                    if (count2 > 0) {
+                        count2 = 0;
+                    }else {
+                        t = pe.new MyThread();
+                        t.start();     
+                    }
+                 }
 
             });
             temp.add(go);
@@ -178,7 +191,16 @@ public class Fireworks extends JPanel{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }               
-                t = pe.new MyThread();
+                try{
+                    im2 = ImageIO.read(new File("src/main/resources/CatsX3.png"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }               
+                try{
+                    im3 = ImageIO.read(new File("src/main/resources/CharlieClareCheryl.png"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }               
             }
         });
     }
